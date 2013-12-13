@@ -46,6 +46,8 @@ import json
 # fld.label = "Email Address"
 # fld.validator("email", "Invalid email address")
 # ...
+# myform.page().line().field("name", "text").validator("email")
+# ...
 # print myform.dump(2)
 # ```
 #
@@ -126,8 +128,6 @@ class CoolForm():
             self.options = options
 
 
-    # ### dump(indent=None)
-    # Returns a JSON string representing the form
     def dump(self, indent=None):
         return json.dumps({'form': self}, cls=CoolForm.__Encoder__, indent=indent)
 
