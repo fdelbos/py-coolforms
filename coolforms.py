@@ -84,7 +84,21 @@ class CoolForm():
     def validator(self, *args, **kwargs):
         return self.pages[-1].lines[-1].fields[-1].validator(*args, **kwargs)
 
-    class Page:
+    class Displayable:
+        def __display__(self, display, field, *values):
+            if hasattr(self, display) is False:
+                self.__dict__[display] = {}
+            if field not in self.__dict__[display]:
+                self.__dict__[display][field] = []
+            self.__dict__[display][field] += list(*values)
+            return self
+
+        def showOn(self, field, *values):
+            return self.__display__('show_on', field, *values)
+        def hideOn(self, field, *values):
+            return self.__display__('hide_on', field, *values)
+
+    class Page(Displayable):
         def __init__(self, title=None, description=None):
             self.title = title
             self.description = description
@@ -96,7 +110,7 @@ class CoolForm():
             return l
 
 
-    class Line:
+    class Line(Displayable):
         def __init__(self):
             self.fields = []
         
@@ -106,7 +120,7 @@ class CoolForm():
             return f
 
 
-    class Field:
+    class Field(Displayable):
         def __init__(self, name, type, label=None, size=1, help=None):
             self.name = name
             self.type = type
