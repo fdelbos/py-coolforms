@@ -20,7 +20,7 @@ class TestSequenceFunctions(unittest.TestCase):
         f.line()
         f.field("email", "text", "an email field", 1)
         f.validator("email", "invalid email")
-        print f.json(2)
+        print f.dump(2)
 
 
 if __name__ == '__main__':
