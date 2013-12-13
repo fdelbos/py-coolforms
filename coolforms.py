@@ -11,10 +11,17 @@ import json
 
 # CoolForms
 # =========
-
-# CoolForm is the main class where everything happend. Basically you instantiate it
-# and then call it's methods to add pages, lines, fields, and validators. For
-# example to create a form and print it's json output do:
+#
+# CoolForm is the main class where everything happend. Basically after you
+# instantiate it call it's methods to add pages, lines, fields, and validators.
+# 
+# Note that you have to call the methods in the right order:
+#
+# ```
+# form -> page -> line -> field -> validator
+# ```
+#
+# For example to create a form and print it's json output do:
 #
 # ```
 # import coolforms
