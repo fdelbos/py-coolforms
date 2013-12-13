@@ -6,9 +6,16 @@
 <span class="c">## file &#39;LICENSE.txt&#39;, which is part of this source code package.</span>
 <span class="c">## </span>
 
-<span class="kn">import</span> <span class="nn">json</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="coolforms">CoolForms</h1></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>CoolForm is the main class where everything happend. Basically you instantiate it
-and then call it's methods to add pages, lines, fields, and validators. For
-example to create a form and print it's json output do:</p>
+<span class="kn">import</span> <span class="nn">json</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="coolforms">CoolForms</h1>
+
+<p>CoolForm is the main class where everything happend. Basically after you
+instantiate it call it's methods to add pages, lines, fields, and validators.
+Note that you have to call the methods in the right order:</p>
+
+<pre><code>form -&gt; page -&gt; line -&gt; field -&gt; validator
+</code></pre>
+
+<p>For example to create a form and print it's json output do:</p>
 
 <pre><code>import coolforms
 myform = coolforms.CoolForm("myform", "/truc")
