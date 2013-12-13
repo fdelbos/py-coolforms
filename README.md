@@ -9,5 +9,5 @@ This script allow the programmer to:
 * Dump CoolForm object to JSON
 * Eventually validate a form with some data
 
-Please have a look at the code.
+[Please have a look at the code.](http://fdelbos.github.io/py-coolforms/coolforms.html)
 
