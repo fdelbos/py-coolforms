@@ -37,6 +37,8 @@ fld = myform.field("email", "text", "Email", 2)
 fld.label = "Email Address"
 fld.validator("email", "Invalid email address")
 ...
+myform.page().line().field("name", "text").validator("email")
+...
 print myform.dump(2)
 </code></pre>
 
@@ -113,9 +115,10 @@ on the coolform wiki.</p></div></div><div class="code"><div class="wrapper"><spa
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="dumpindentnone">dump(indent=None)</h3>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
 
-<p>Returns a JSON string representing the form</p></div></div><div class="code"><div class="wrapper">    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="p">},</span> <span class="n">cls</span><span class="o">=</span><span class="n">CoolForm</span><span class="o">.</span><span class="n">__Encoder__</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">__Encoder__</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
