@@ -46,6 +46,9 @@
 # on the coolform wiki.
 import json
 
+# ## API
+#
+#
 # **CoolForm(name, action, method, submit, reset)**
 #
 # Constructor
@@ -134,7 +137,7 @@ class CoolForm():
 
     # **line()**
     #
-    # Add a new line to the page.
+    # Add a new line to the current page.
     class Line(Displayable):
         def __init__(self):
             self.fields = []
@@ -147,7 +150,7 @@ class CoolForm():
 
     # **field(name, type, label, size, help, default)**
     #
-    # Add a field to the line
+    # Add a field to the current line.
     #
     # * **name** : Name for the field to be sent on submit
     # * **type** : Type of the field
@@ -185,7 +188,7 @@ class CoolForm():
 
     # **customValidator(name, module, factory)**
     #
-    # Enable the use of a custom validator.
+    # Enable the use of a custom validator. Must be called on a CoolForm object.
     #
     # * **name** : An alias for using the validator, that's how you call it in the form.
     # * **module** : AngularJS module where it is declared.
@@ -200,7 +203,7 @@ class CoolForm():
 
     # **customDirective(name, tag)**
     #
-    # Enalble the use of a custom directive for a field.
+    # Enalble the use of a custom directive for a field. Must be called on a CoolForm object.
     #
     # * **name** : An alias inside the form.
     # * **tag** : The AngularJS tag to display the directive. Should be accessible from the forms's scope.
@@ -214,7 +217,7 @@ class CoolForm():
 
     # **dump(indent=None)**
     #
-    # Dumps the current state of the form to JSON.
+    # Dumps the current state of the form to JSON. Must be called on a CoolForm object.
     #
     # * **indent** : An optionnal integer parameter that allows pretty printing.
     def dump(self, indent=None):
