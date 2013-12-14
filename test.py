@@ -15,12 +15,10 @@ class TestSequenceFunctions(unittest.TestCase):
         f = cf.CoolForm("form", "/truc")
         f.page("First Page", "this is my first page")
         f.line()
-        f.field("f1", "text", "a text field", 1, "some help")
-        f.field("f2", "text", "a text field", 1, "some help")
-        f.line()
-        f.field("email", "text", "an email field", 1)
-        f.validator("email", "invalid email")
+        f.field("f1", "text", default="default")
+        f.addValidator("test", "testModule", "testFactory")
         print f.dump(2)
+        
 
 
 if __name__ == '__main__':
