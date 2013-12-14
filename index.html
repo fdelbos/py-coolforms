@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>coolforms.py</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>coolforms.py</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">import</span> json</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="overview">Overview</h2>
+<p>coolform.py is a Form generator for <a href="https://github.com/fdelbos/coolforms">CoolForms</a>.
+Instantiate a CoolForm object and add pages, lines, fields, validators... Once you are done
+dump the form to JSON</p>
+<p>Note that you have to call the methods in the right order:</p>
+<pre><code>1 page -&gt; 2 line -&gt; 3 field -&gt; 4validator</code></pre>
+<p>For example to create a form and print it&#39;s json output do:</p>
+<pre><code>import coolforms
+
+myform = coolforms.CoolForm(&quot;myform&quot;, &quot;/truc&quot;)
+myform.page(&quot;First Page&quot;, &quot;this is my first page&quot;)
+myform.line()
+myform.field(&quot;first_name&quot;, &quot;text&quot;, &quot;First Name&quot;, 2)
+myform.field(&quot;last_name&quot;, &quot;text&quot;, &quot;Last Name&quot;, 2)
+myform.line()
+myform.field(&quot;email&quot;, &quot;text&quot;, &quot;Email&quot;, 2)
+myform.validator(&quot;email&quot;, &quot;Invalid email address&quot;)
+print myform.dump(2)</code></pre>
+<p>Also note that a call always return the newly created object. For example
+you could do that if you wish:</p>
+<pre><code>...
+fld = myform.field(&quot;email&quot;, &quot;text&quot;, &quot;Email&quot;, 2)
+fld.label = &quot;Email Address&quot;
+fld.validator(&quot;email&quot;, &quot;Invalid email address&quot;)
+...
+myform.page().line().field(&quot;name&quot;, &quot;text&quot;).validator(&quot;email&quot;)
+...
+print myform.dump(2)</code></pre>
+<p>For a depeer explenation on the form content please refere to the
+<a href="https://github.com/fdelbos/coolforms/wiki/Form-Definition">Form Definition page</a>
+on the coolform wiki.</p>
+<p><strong>CoolForm(name, action, method, submit, reset)</strong></p>
+<p>Add a display constraint on a field. Elements are shown when some other field(s) match value(s).</p>
+<ul>
+<li><strong>name</strong> : Name of the form</li>
+<li><strong>action</strong> : URL to send data</li>
+<li><strong>method</strong> : HTTP method to use, default is POST</li>
+<li><strong>submit</strong> : Text to display on the submit button</li>
+<li><strong>reset</strong> : Text to display on the reset button, if not set, the button is not displayed</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">CoolForm</span><span class="params">()</span>:</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, 
+                 name,
+                 action,
+                 method=<span class="string">"POST"</span>, 
+                 submit=None, 
+                 reset=None)</span>:</span>
+
+        self.action = action
+        self.name = name
+        self.method = method
+        self.submit = submit
+        self.resest = reset
+        self.pages = []
+        self.dependencies = []
+        
+
+    <span class="function"><span class="keyword">def</span> <span class="title">page</span><span class="params">(self, title=None, description=None)</span>:</span>
+        p = CoolForm.Page(title, description)
+        self.pages.append(p)
+        <span class="keyword">return</span> p
+
+    <span class="function"><span class="keyword">def</span> <span class="title">line</span><span class="params">(self, *args, **kwargs)</span>:</span>
+        <span class="keyword">return</span> self.pages[-<span class="number">1</span>].line(*args, **kwargs)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">field</span><span class="params">(self, *args, **kwargs)</span>:</span>
+        <span class="keyword">return</span> self.pages[-<span class="number">1</span>].lines[-<span class="number">1</span>].field(*args, **kwargs)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">validator</span><span class="params">(self, *args, **kwargs)</span>:</span>
+        <span class="keyword">return</span> self.pages[-<span class="number">1</span>].lines[-<span class="number">1</span>].fields[-<span class="number">1</span>].validator(*args, **kwargs)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Pages, Lines and Fields can be shown or hidden when a previously declared field  match a value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="class"><span class="keyword">class</span> <span class="title">Displayable</span>:</span>
+        <span class="function"><span class="keyword">def</span> <span class="title">__display__</span><span class="params">(self, display, field, *values)</span>:</span>
+            <span class="keyword">if</span> hasattr(self, display) <span class="keyword">is</span> <span class="keyword">False</span>:
+                self.__dict__[display] = {}
+            <span class="keyword">if</span> field <span class="keyword">not</span> <span class="keyword">in</span> self.__dict__[display]:
+                self.__dict__[display][field] = []
+            self.__dict__[display][field] += list(*values)
+            <span class="keyword">return</span> self</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><strong>showOn(field, *values)</strong></p>
+<p>Add a display constraint on a field. Elements are shown when some other field(s) match value(s).</p>
+<ul>
+<li><strong>field</strong> : Field to match</li>
+<li><strong>values</strong> : A List of possible values</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="function"><span class="keyword">def</span> <span class="title">showOn</span><span class="params">(self, field, *values)</span>:</span>
+            <span class="keyword">return</span> self.__display__(<span class="string">'show_on'</span>, field, *values)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>hideOn(field, *values)</strong></p>
+<p>Add a display constraint on a field. Elements are hiddens when they match some other field(s) value(s).</p>
+<ul>
+<li><strong>field</strong> : Field to match</li>
+<li><strong>values</strong> : A List of possible values</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="function"><span class="keyword">def</span> <span class="title">hideOn</span><span class="params">(self, field, *values)</span>:</span>
+            <span class="keyword">return</span> self.__display__(<span class="string">'hide_on'</span>, field, *values)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><strong>page(title, description)</strong></p>
+<p>Add a page to the form.</p>
+<ul>
+<li><strong>title</strong> : Title for the page</li>
+<li><strong>description</strong> : A description to be displayed</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="class"><span class="keyword">class</span> <span class="title">Page</span><span class="params">(Displayable)</span>:</span>
+        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, title=None, description=None)</span>:</span>
+            self.title = title
+            self.description = description
+            self.lines = []
+
+        <span class="function"><span class="keyword">def</span> <span class="title">line</span><span class="params">(self, *args, **kwargs)</span>:</span>
+            l = CoolForm.Line(*args, **kwargs)
+            self.lines.append(l)
+            <span class="keyword">return</span> l</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p><strong>line()</strong></p>
+<p>Add a new line to the page.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="class"><span class="keyword">class</span> <span class="title">Line</span><span class="params">(Displayable)</span>:</span>
+        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+            self.fields = []
+        
+        <span class="function"><span class="keyword">def</span> <span class="title">field</span><span class="params">(self, *args, **kwargs)</span>:</span>
+            f = CoolForm.Field(*args, **kwargs)
+            self.fields.append(f)
+            <span class="keyword">return</span> f</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p><strong>field(name, type, label, size, help, default)</strong></p>
+<p>Add a field to the line</p>
+<ul>
+<li><strong>name</strong> : Name for the field to be sent on submit</li>
+<li><strong>type</strong> : Type of the field</li>
+<li><strong>size</strong> : An integer</li>
+<li><strong>help</strong> : Help to be displayed to the user</li>
+<li><strong>default</strong> : Default value of the field</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="class"><span class="keyword">class</span> <span class="title">Field</span><span class="params">(Displayable)</span>:</span>
+        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, type, label=None, size=<span class="number">1</span>, help=None, default=None)</span>:</span>
+            self.name = name
+            self.type = type
+            self.label = label
+            self.size = size
+            self.help = help
+            self.default = default
+            self.validators = []
+
+        <span class="function"><span class="keyword">def</span> <span class="title">validator</span><span class="params">(self, *args, **kwargs)</span>:</span>
+            v = CoolForm.Validator(*args, **kwargs)
+            self.validators.append(v)
+            <span class="keyword">return</span> v</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p><strong>validator(name, message, options)</strong></p>
+<p>Add a validator to a field</p>
+<ul>
+<li><strong>name</strong> : Name of the validation function</li>
+<li><strong>message</strong> : Message to be displayed in case of mismatch</li>
+<li><strong>options</strong> : Some options to be passed to the validation function</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="class"><span class="keyword">class</span> <span class="title">Validator</span>:</span>
+        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, message=None, options={})</span>:</span>
+            self.name = name
+            self.message = message
+            self.options = options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p><strong>customValidator(name, module, factory)</strong></p>
+<p>Enable the use of a custom validator.</p>
+<ul>
+<li><strong>name</strong> : An alias for using the validator, that&#39;s how you call it in the form.</li>
+<li><strong>module</strong> : AngularJS module where it is declared.</li>
+<li><strong>factory</strong> : Factory function that returns the validator.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">def</span> <span class="title">customValidator</span><span class="params">(self, name, module, factory)</span>:</span>
+        self.dependencies.append({
+            <span class="string">'type'</span>:<span class="string">'validator'</span>,
+            <span class="string">'name'</span>: name,
+            <span class="string">'module'</span>: module,
+            <span class="string">'factory'</span>: factory})
+        <span class="keyword">return</span> self</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p><strong>customDirective(name, tag)</strong></p>
+<p>Enalble the use of a custom directive for a field.</p>
+<ul>
+<li><strong>name</strong> : An alias inside the form.</li>
+<li><strong>tag</strong> : The AngularJS tag to display the directive. Should be accessible from the forms&#39;s scope.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">def</span> <span class="title">customDirective</span><span class="params">(self, name, tag)</span>:</span>
+        self.dependencies.append({
+            <span class="string">'type'</span>:<span class="string">'directive'</span>,
+            <span class="string">'name'</span>: name,
+            <span class="string">'tag'</span>: tag})
+        <span class="keyword">return</span> self</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p><strong>dump(indent=None)</strong></p>
+<p>Dumps the current state of the form to JSON.</p>
+<ul>
+<li><strong>indent</strong> : An optionnal integer parameter that allows pretty printing.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="keyword">def</span> <span class="title">dump</span><span class="params">(self, indent=None)</span>:</span>
+        <span class="keyword">return</span> json.dumps({<span class="string">'form'</span>: self}, cls=CoolForm.__Encoder__, indent=indent)
+
+    <span class="class"><span class="keyword">class</span> <span class="title">__Encoder__</span><span class="params">(json.JSONEncoder)</span>:</span>
+        <span class="function"><span class="keyword">def</span> <span class="title">default</span><span class="params">(self, obj)</span>:</span>
+            <span class="keyword">return</span> {k: v <span class="keyword">for</span> k, v <span class="keyword">in</span> obj.__dict__.items() <span class="keyword">if</span> v != <span class="keyword">None</span> <span class="keyword">and</span> v != [] <span class="keyword">and</span> v != {}}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
