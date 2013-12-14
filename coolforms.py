@@ -1,7 +1,7 @@
-import json
 # ## Overview
 #
-# coolform.py is a Form generator for [CoolForms](https://github.com/fdelbos/coolforms).
+# [py-coolform](https://github.com/fdelbos/py-coolforms)
+# is a Form generator for [CoolForms](https://github.com/fdelbos/coolforms).
 # Instantiate a CoolForm object and add pages, lines, fields, validators... Once you are done
 # dump the form to JSON
 # 
@@ -44,7 +44,8 @@ import json
 # For a depeer explenation on the form content please refere to the
 # [Form Definition page](https://github.com/fdelbos/coolforms/wiki/Form-Definition)
 # on the coolform wiki.
-#
+import json
+
 # **CoolForm(name, action, method, submit, reset)**
 #
 # Constructor
