@@ -69,6 +69,8 @@ class CoolForm():
         self.submit = submit
         self.resest = reset
         self.pages = []
+        self.dependency = []
+        
 
     def page(self, title=None, description=None):
         p = CoolForm.Page(title, description)
@@ -121,12 +123,13 @@ class CoolForm():
 
 
     class Field(Displayable):
-        def __init__(self, name, type, label=None, size=1, help=None):
+        def __init__(self, name, type, label=None, size=1, help=None, default=None):
             self.name = name
             self.type = type
             self.label = label
             self.size = size
             self.help = help
+            self.default = default
             self.validators = []
 
         def validator(self, *args, **kwargs):
@@ -147,4 +150,4 @@ class CoolForm():
 
     class __Encoder__(json.JSONEncoder):
         def default(self, obj):
-            return obj.__dict__
+            return {k: v for k, v in obj.__dict__.items() if v != None and v != [] and v != {}}
