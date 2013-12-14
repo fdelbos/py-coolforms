@@ -69,7 +69,7 @@ class CoolForm():
         self.submit = submit
         self.resest = reset
         self.pages = []
-        self.dependency = []
+        self.dependencies = []
         
 
     def page(self, title=None, description=None):
@@ -85,6 +85,30 @@ class CoolForm():
 
     def validator(self, *args, **kwargs):
         return self.pages[-1].lines[-1].fields[-1].validator(*args, **kwargs)
+
+    # #### addValidator(name, module, factory)
+    # enable the use of a custom validator.
+    # * **name** : An alias for using the validator, that's how you call it in the form.
+    # * **module** : AngularJS module where it is declared.
+    # * **factory** : Factory function that returns the validator.
+    def addValidator(self, name, module, factory):
+        self.dependencies.append({
+            'type':'validator',
+            'name': name,
+            'module': module,
+            'factory': factory})
+        return self
+
+    # #### addDirective(name, fieldType)
+    # enalble the use of a custom directive for a field.
+    # * **name** : An alias inside the form.
+    # * **directiveType** : The AngularJS type of the directive. The type should be accessible from the scope of the form.
+    def addDirective(self, name, directiveType):
+        self.dependencies.append({
+            'type':'directive',
+            'name': name,
+            'directive_type': directiveType})
+        return self
 
     class Displayable:
         def __display__(self, display, field, *values):
