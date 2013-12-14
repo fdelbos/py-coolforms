@@ -44,7 +44,14 @@ print myform.dump(2)
 
 <p>For a depeer explenation on the form content please refere to the
 <a href="https://github.com/fdelbos/coolforms/wiki/Form-Definition">Form Definition page</a>
-on the coolform wiki.</p></div></div><div class="code"><div class="wrapper"><span class="k">class</span> <span class="nc">CoolForm</span><span class="p">():</span>
+on the coolform wiki.
+<strong>CoolForm(name, action, method, submit, reset)</strong>
+Add a display constraint on a field. Elements are shown when some other field(s) match value(s).
+* <strong>name</strong> : Name of the form
+* <strong>action</strong> : URL to send data
+* <strong>method</strong> : HTTP method to use, default is POST
+* <strong>submit</strong> : Text to display on the submit button
+* <strong>reset</strong> : Text to display on the reset button, if not set, the button is not displayed</p></div></div><div class="code"><div class="wrapper"><span class="k">class</span> <span class="nc">CoolForm</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                  <span class="n">name</span><span class="p">,</span>
@@ -74,43 +81,25 @@ on the coolform wiki.</p></div></div><div class="code"><div class="wrapper"><spa
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h4 id="addvalidatorname-module-factory">addValidator(name, module, factory)</h4>
-
-<p>enable the use of a custom validator.
-* <strong>name</strong> : An alias for using the validator, that's how you call it in the form.
-* <strong>module</strong> : AngularJS module where it is declared.
-* <strong>factory</strong> : Factory function that returns the validator.</p></div></div><div class="code"><div class="wrapper">    <span class="k">def</span> <span class="nf">addValidator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;validator&#39;</span><span class="p">,</span>
-            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-            <span class="s">&#39;module&#39;</span><span class="p">:</span> <span class="n">module</span><span class="p">,</span>
-            <span class="s">&#39;factory&#39;</span><span class="p">:</span> <span class="n">factory</span><span class="p">})</span>
-        <span class="k">return</span> <span class="bp">self</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h4 id="adddirectivename-fieldtype">addDirective(name, fieldType)</h4>
-
-<p>enalble the use of a custom directive for a field.
-* <strong>name</strong> : An alias inside the form.
-* <strong>directiveType</strong> : The AngularJS type of the directive. The type should be accessible from the scope of the form.</p></div></div><div class="code"><div class="wrapper">    <span class="k">def</span> <span class="nf">addDirective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">directiveType</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;directive&#39;</span><span class="p">,</span>
-            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-            <span class="s">&#39;directive_type&#39;</span><span class="p">:</span> <span class="n">directiveType</span><span class="p">})</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">class</span> <span class="nc">Displayable</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pages, Lines and Fields can be shown or hidden when previously declared field  match a value.</p></div></div><div class="code"><div class="wrapper">    <span class="k">class</span> <span class="nc">Displayable</span><span class="p">:</span>
         <span class="k">def</span> <span class="nf">__display__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">display</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">display</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">display</span><span class="p">][</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">display</span><span class="p">][</span><span class="n">field</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span>
-
-        <span class="k">def</span> <span class="nf">showOn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__display__</span><span class="p">(</span><span class="s">&#39;show_on&#39;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">hideOn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__display__</span><span class="p">(</span><span class="s">&#39;hide_on&#39;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">)</span>
-
-    <span class="k">class</span> <span class="nc">Page</span><span class="p">(</span><span class="n">Displayable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>showOn(field, *values)</strong>
+Add a display constraint on a field. Elements are shown when some other field(s) match value(s).
+* <strong>field</strong> : Field to match
+* <strong>values</strong> : A List of possible values</p></div></div><div class="code"><div class="wrapper">        <span class="k">def</span> <span class="nf">showOn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__display__</span><span class="p">(</span><span class="s">&#39;show_on&#39;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>hideOn(field, *values)</strong>
+Add a display constraint on a field. Elements are hiddens when they match some other field(s) value(s).
+* <strong>field</strong> : Field to match
+* <strong>values</strong> : A List of possible values</p></div></div><div class="code"><div class="wrapper">        <span class="k">def</span> <span class="nf">hideOn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__display__</span><span class="p">(</span><span class="s">&#39;hide_on&#39;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>page(title, description)</strong>
+Add a page to the form.
+* <strong>title</strong> : Title for the page
+* <strong>description</strong> : A description to be displayed</p></div></div><div class="code"><div class="wrapper">    <span class="k">class</span> <span class="nc">Page</span><span class="p">(</span><span class="n">Displayable</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
@@ -119,20 +108,21 @@ on the coolform wiki.</p></div></div><div class="code"><div class="wrapper"><spa
         <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">l</span> <span class="o">=</span> <span class="n">CoolForm</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">l</span>
-
-
-    <span class="k">class</span> <span class="nc">Line</span><span class="p">(</span><span class="n">Displayable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">l</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>line()</strong>
+Add a new line to the page.</p></div></div><div class="code"><div class="wrapper">    <span class="k">class</span> <span class="nc">Line</span><span class="p">(</span><span class="n">Displayable</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
         
         <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">CoolForm</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">f</span>
-
-
-    <span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="n">Displayable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">f</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>field(name, type, label, size, help, default)</strong>
+Add a field to the line
+* <strong>name</strong> : Name for the field to be sent on submit
+* <strong>type</strong> : Type of the field
+* <strong>size</strong> : An integer
+* <strong>help</strong> : Help to be displayed to the user
+* <strong>default</strong> : Default value of the field</p></div></div><div class="code"><div class="wrapper">    <span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="n">Displayable</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
@@ -145,17 +135,35 @@ on the coolform wiki.</p></div></div><div class="code"><div class="wrapper"><spa
         <span class="k">def</span> <span class="nf">validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">CoolForm</span><span class="o">.</span><span class="n">Validator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">v</span>
-
-
-    <span class="k">class</span> <span class="nc">Validator</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">v</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>validator(name, message, options)</strong>
+Add a validator to a field
+* <strong>name</strong> : Name of the validation function
+* <strong>message</strong> : Message to be displayed in case of mismatch
+* <strong>options</strong> : Some options to be passed to the validation function</p></div></div><div class="code"><div class="wrapper">    <span class="k">class</span> <span class="nc">Validator</span><span class="p">:</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
-
-
-    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>customValidator(name, module, factory)</strong>
+Enable the use of a custom validator.
+* <strong>name</strong> : An alias for using the validator, that's how you call it in the form.
+* <strong>module</strong> : AngularJS module where it is declared.
+* <strong>factory</strong> : Factory function that returns the validator.</p></div></div><div class="code"><div class="wrapper">    <span class="k">def</span> <span class="nf">customValidator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;validator&#39;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s">&#39;module&#39;</span><span class="p">:</span> <span class="n">module</span><span class="p">,</span>
+            <span class="s">&#39;factory&#39;</span><span class="p">:</span> <span class="n">factory</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>customDirective(name, tag)</strong>
+Enalble the use of a custom directive for a field.
+* <strong>name</strong> : An alias inside the form.
+* <strong>tag</strong> : The AngularJS tag to display the directive. Should be accessible from the forms's scope.</p></div></div><div class="code"><div class="wrapper">    <span class="k">def</span> <span class="nf">customDirective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;directive&#39;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s">&#39;tag&#39;</span><span class="p">:</span> <span class="n">tag</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p><strong>dump(indent=None)</strong>
+Dumps the current state of the form to JSON.
+* <strong>indent</strong> : An optionnal integer parameter that allows pretty printing.</p></div></div><div class="code"><div class="wrapper">    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="p">},</span> <span class="n">cls</span><span class="o">=</span><span class="n">CoolForm</span><span class="o">.</span><span class="n">__Encoder__</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">__Encoder__</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
