@@ -47,7 +47,7 @@ import json
 #
 # **CoolForm(name, action, method, submit, reset)**
 #
-# Add a display constraint on a field. Elements are shown when some other field(s) match value(s).
+# Constructor
 #
 # * **name** : Name of the form
 # * **action** : URL to send data
