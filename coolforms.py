@@ -54,6 +54,17 @@ import json
 # For a depeer explenation on the form content please refere to the
 # [Form Definition page](https://github.com/fdelbos/coolforms/wiki/Form-Definition)
 # on the coolform wiki.
+#
+#
+# **CoolForm(name, action, method, submit, reset)**
+#
+# Add a display constraint on a field. Elements are shown when some other field(s) match value(s).
+#
+# * **name** : Name of the form
+# * **action** : URL to send data
+# * **method** : HTTP method to use, default is POST
+# * **submit** : Text to display on the submit button
+# * **reset** : Text to display on the reset button, if not set, the button is not displayed
 class CoolForm():
 
     def __init__(self, 
@@ -86,30 +97,7 @@ class CoolForm():
     def validator(self, *args, **kwargs):
         return self.pages[-1].lines[-1].fields[-1].validator(*args, **kwargs)
 
-    # #### addValidator(name, module, factory)
-    # enable the use of a custom validator.
-    # * **name** : An alias for using the validator, that's how you call it in the form.
-    # * **module** : AngularJS module where it is declared.
-    # * **factory** : Factory function that returns the validator.
-    def addValidator(self, name, module, factory):
-        self.dependencies.append({
-            'type':'validator',
-            'name': name,
-            'module': module,
-            'factory': factory})
-        return self
-
-    # #### addDirective(name, fieldType)
-    # enalble the use of a custom directive for a field.
-    # * **name** : An alias inside the form.
-    # * **directiveType** : The AngularJS type of the directive. The type should be accessible from the scope of the form.
-    def addDirective(self, name, directiveType):
-        self.dependencies.append({
-            'type':'directive',
-            'name': name,
-            'directive_type': directiveType})
-        return self
-
+    # Pages, Lines and Fields can be shown or hidden when previously declared field  match a value.
     class Displayable:
         def __display__(self, display, field, *values):
             if hasattr(self, display) is False:
@@ -119,11 +107,30 @@ class CoolForm():
             self.__dict__[display][field] += list(*values)
             return self
 
+        # **showOn(field, *values)**
+        #
+        # Add a display constraint on a field. Elements are shown when some other field(s) match value(s).
+        #
+        # * **field** : Field to match
+        # * **values** : A List of possible values
         def showOn(self, field, *values):
             return self.__display__('show_on', field, *values)
+
+        # **hideOn(field, *values)**
+        #
+        # Add a display constraint on a field. Elements are hiddens when they match some other field(s) value(s).
+        #
+        # * **field** : Field to match
+        # * **values** : A List of possible values
         def hideOn(self, field, *values):
             return self.__display__('hide_on', field, *values)
 
+    # **page(title, description)**
+    #
+    # Add a page to the form.
+    #
+    # * **title** : Title for the page
+    # * **description** : A description to be displayed
     class Page(Displayable):
         def __init__(self, title=None, description=None):
             self.title = title
@@ -135,7 +142,9 @@ class CoolForm():
             self.lines.append(l)
             return l
 
-
+    # **line()**
+    #
+    # Add a new line to the page.
     class Line(Displayable):
         def __init__(self):
             self.fields = []
@@ -146,6 +155,15 @@ class CoolForm():
             return f
 
 
+    # **field(name, type, label, size, help, default)**
+    #
+    # Add a field to the line
+    #
+    # * **name** : Name for the field to be sent on submit
+    # * **type** : Type of the field
+    # * **size** : An integer
+    # * **help** : Help to be displayed to the user
+    # * **default** : Default value of the field
     class Field(Displayable):
         def __init__(self, name, type, label=None, size=1, help=None, default=None):
             self.name = name
@@ -162,13 +180,53 @@ class CoolForm():
             return v
 
 
+    # **validator(name, message, options)**
+    #
+    # Add a validator to a field
+    #
+    # * **name** : Name of the validation function
+    # * **message** : Message to be displayed in case of mismatch
+    # * **options** : Some options to be passed to the validation function
     class Validator:
         def __init__(self, name, message=None, options={}):
             self.name = name
             self.message = message
             self.options = options
 
+    # **customValidator(name, module, factory)**
+    #
+    # Enable the use of a custom validator.
+    #
+    # * **name** : An alias for using the validator, that's how you call it in the form.
+    # * **module** : AngularJS module where it is declared.
+    # * **factory** : Factory function that returns the validator.
+    def customValidator(self, name, module, factory):
+        self.dependencies.append({
+            'type':'validator',
+            'name': name,
+            'module': module,
+            'factory': factory})
+        return self
 
+    # **customDirective(name, tag)**
+    #
+    # Enalble the use of a custom directive for a field.
+    #
+    # * **name** : An alias inside the form.
+    # * **tag** : The AngularJS tag to display the directive. Should be accessible from the forms's scope.
+    def customDirective(self, name, tag):
+        self.dependencies.append({
+            'type':'directive',
+            'name': name,
+            'tag': tag})
+        return self
+
+
+    # **dump(indent=None)**
+    #
+    # Dumps the current state of the form to JSON.
+    #
+    # * **indent** : An optionnal integer parameter that allows pretty printing.
     def dump(self, indent=None):
         return json.dumps({'form': self}, cls=CoolForm.__Encoder__, indent=indent)
 

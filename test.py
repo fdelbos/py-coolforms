@@ -16,7 +16,7 @@ class TestSequenceFunctions(unittest.TestCase):
         f.page("First Page", "this is my first page")
         f.line()
         f.field("f1", "text", default="default")
-        f.addValidator("test", "testModule", "testFactory")
+        f.customValidator("test", "testModule", "testFactory")
         print f.dump(2)
         
 
