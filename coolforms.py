@@ -1,24 +1,14 @@
-## 
-## coolforms.py
-## 
-## Created by Frederic DELBOS - fred.delbos@gmail.com on Dec 13 2013.
-## This file is subject to the terms and conditions defined in
-## file 'LICENSE.txt', which is part of this source code package.
-## 
-
 import json
-
-
-# CoolForms
-# =========
+# ## Overview
 #
-# CoolForm is the main class where everything happend. Basically after you
-# instantiate it call it's methods to add pages, lines, fields, and validators.
+# coolform.py is a Form generator for [CoolForms](https://github.com/fdelbos/coolforms).
+# Instantiate a CoolForm object and add pages, lines, fields, validators... Once you are done
+# dump the form to JSON
 # 
 # Note that you have to call the methods in the right order:
 #
 # ```
-# form -> page -> line -> field -> validator
+# 1 page -> 2 line -> 3 field -> 4validator
 # ```
 #
 # For example to create a form and print it's json output do:
@@ -54,7 +44,6 @@ import json
 # For a depeer explenation on the form content please refere to the
 # [Form Definition page](https://github.com/fdelbos/coolforms/wiki/Form-Definition)
 # on the coolform wiki.
-#
 #
 # **CoolForm(name, action, method, submit, reset)**
 #
@@ -97,7 +86,7 @@ class CoolForm():
     def validator(self, *args, **kwargs):
         return self.pages[-1].lines[-1].fields[-1].validator(*args, **kwargs)
 
-    # Pages, Lines and Fields can be shown or hidden when previously declared field  match a value.
+    # Pages, Lines and Fields can be shown or hidden when a previously declared field  match a value.
     class Displayable:
         def __display__(self, display, field, *values):
             if hasattr(self, display) is False:
