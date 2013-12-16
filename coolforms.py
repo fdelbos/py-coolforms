@@ -71,7 +71,7 @@ class CoolForm():
         self.name = name
         self.method = method
         self.submit = submit
-        self.resest = reset
+        self.reset = reset
         self.pages = []
         self.dependencies = []
         
@@ -157,14 +157,25 @@ class CoolForm():
     # * **size** : An integer
     # * **help** : Help to be displayed to the user
     # * **default** : Default value of the field
+    # * **options** : Field specific options
     class Field(Displayable):
-        def __init__(self, name, type, label=None, size=1, help=None, default=None):
+        def __init__(self,
+                     name,
+                     type,
+                     label=None,
+                     size=1,
+                     help=None,
+                     mandatory=False,
+                     default=None,
+                     options=None):
             self.name = name
             self.type = type
             self.label = label
             self.size = size
             self.help = help
+            self.mandatory = mandatory
             self.default = default
+            self.options = options
             self.validators = []
 
         def validator(self, *args, **kwargs):
