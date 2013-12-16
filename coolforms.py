@@ -74,6 +74,8 @@ class CoolForm():
         self.reset = reset
         self.pages = []
         self.dependencies = []
+        self.hiddens = {}
+        self.headers = {}
         
 
     def page(self, title=None, description=None):
@@ -225,6 +227,25 @@ class CoolForm():
             'tag': tag})
         return self
 
+    # **header(key, value)**
+    #
+    # Add a header to the ajax request
+    #
+    # * **key** : Name of the header
+    # * **value** : Value of the header
+    def header(self, key, value):
+        self.headers[key] = value
+        return self
+
+    # **hidden(name, value)**
+    #
+    # Add an hidden field to be sent
+    #
+    # * **name** : Name of the field
+    # * **value** : Value of the field
+    def hidden(self, name, value):
+        self.hiddens[name] = value        
+        return self
 
     # **dump(indent=None)**
     #
